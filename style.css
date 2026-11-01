@@ -1,0 +1,26 @@
+body {
+  font-family: "Malgun Gothic", sans-serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+input, select, button {
+  padding: 6px;
+  margin: 4px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+th, td {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.message.success { color: green; }
+.message.error { color: red; }
