@@ -1,14 +1,16 @@
-//표
+// 표
 let books = [];
+let editId = null; // 수정중인 책 id (없으면 null)
 
 const list = document.getElementById("book-list");
-
 const message = document.getElementById("message");
+const form = document.getElementById("book-form");
+const search = document.getElementById("search");
 
 function showMessage(text, type) {
   message.textContent = text;
   message.className = "message " + type;
-}  
+}
 
 function render(data) {
   list.innerHTML = "";
@@ -38,8 +40,8 @@ async function loadBooks() {
     showMessage(err.message, "error");
   }
 }
-let editId = null; // 수정중인 책 id (없으면 null)
 
+// 수정 버튼
 function startEdit(id) {
   const book = books.find(function (b) {
     return b.id == id;
@@ -67,10 +69,7 @@ function cancelEdit() {
 
 document.getElementById("cancel-btn").addEventListener("click", cancelEdit);
 
-loadBooks();
-
-const form = document.getElementById("book-form");
-
+// 등록 / 수정
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
 
@@ -81,7 +80,8 @@ form.addEventListener("submit", async function (e) {
     price: Number(document.getElementById("price").value),
     rating: Number(document.getElementById("rating").value),
   };
-    if (book.title == "") {
+
+  if (book.title == "") {
     showMessage("제목을 입력하세요", "error");
     return;
   }
@@ -103,32 +103,42 @@ form.addEventListener("submit", async function (e) {
   }
 
   try {
-    await addBook(book);
-    showMessage("등록 완료!", "success");
-    form.reset();
+    if (editId) {
+      await updateBook(editId, book);
+      showMessage("수정 완료!", "success");
+    } else {
+      await addBook(book);
+      showMessage("등록 완료!", "success");
+    }
+    cancelEdit();
     loadBooks();
   } catch (err) {
     showMessage(err.message, "error");
   }
 });
 
+// 삭제
+async function removeBook(id) {
+  if (!confirm("삭제할까요?")) {
+    return;
+  }
 
-async function updateBook(id, book) {
-  const res = await fetch(API_URL + "/" + id, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(book),
-  });
-  if (!res.ok) {
-    throw new Error("수정 실패");
+  try {
+    await deleteBook(id);
+    showMessage("삭제 완료!", "success");
+    loadBooks();
+  } catch (err) {
+    showMessage(err.message, "error");
   }
 }
 
-async function deleteBook(id) {
-  const res = await fetch(API_URL + "/" + id, {
-    method: "DELETE",
+// 검색
+search.addEventListener("input", function () {
+  const word = search.value.trim();
+  const result = books.filter(function (b) {
+    return b.title.includes(word) || b.author.includes(word);
   });
-  if (!res.ok) {
-    throw new Error("삭제 실패");
-  }
-}
+  render(result);
+});
+
+loadBooks();
