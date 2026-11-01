@@ -9,6 +9,3 @@ async function getBooks() {
   return await res.json();
 }
 
-let books = [];
-
-const list = document.getElementById("book-list");

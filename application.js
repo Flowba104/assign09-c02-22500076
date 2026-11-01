@@ -1,4 +1,15 @@
 //표
+let books = [];
+
+const list = document.getElementById("book-list");
+
+const message = document.getElementById("message");
+
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = "message " + type;
+}  
+
 function render(data) {
   list.innerHTML = "";
 
@@ -20,8 +31,12 @@ function render(data) {
 }
 
 async function loadBooks() {
-  books = await getBooks();
-  render(books);
+  try {
+    books = await getBooks();
+    render(books);
+  } catch (err) {
+    showMessage(err.message, "error");
+  }
 }
 
 loadBooks();
