@@ -40,3 +40,26 @@ async function loadBooks() {
 }
 
 loadBooks();
+
+const form = document.getElementById("book-form");
+
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const book = {
+    title: document.getElementById("title").value.trim(),
+    author: document.getElementById("author").value.trim(),
+    genre: document.getElementById("genre").value,
+    price: Number(document.getElementById("price").value),
+    rating: Number(document.getElementById("rating").value),
+  };
+
+  try {
+    await addBook(book);
+    showMessage("등록 완료!", "success");
+    form.reset();
+    loadBooks();
+  } catch (err) {
+    showMessage(err.message, "error");
+  }
+});
