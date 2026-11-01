@@ -111,3 +111,15 @@ form.addEventListener("submit", async function (e) {
     showMessage(err.message, "error");
   }
 });
+
+
+async function updateBook(id, book) {
+  const res = await fetch(API_URL + "/" + id, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(book),
+  });
+  if (!res.ok) {
+    throw new Error("수정 실패");
+  }
+}
