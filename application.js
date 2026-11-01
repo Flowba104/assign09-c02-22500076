@@ -123,3 +123,12 @@ async function updateBook(id, book) {
     throw new Error("수정 실패");
   }
 }
+
+async function deleteBook(id) {
+  const res = await fetch(API_URL + "/" + id, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    throw new Error("삭제 실패");
+  }
+}
