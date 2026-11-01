@@ -53,6 +53,26 @@ form.addEventListener("submit", async function (e) {
     price: Number(document.getElementById("price").value),
     rating: Number(document.getElementById("rating").value),
   };
+    if (book.title == "") {
+    showMessage("제목을 입력하세요", "error");
+    return;
+  }
+  if (book.author == "") {
+    showMessage("저자를 입력하세요", "error");
+    return;
+  }
+  if (book.genre == "") {
+    showMessage("장르를 선택하세요", "error");
+    return;
+  }
+  if (book.price <= 0) {
+    showMessage("가격을 제대로 입력하세요", "error");
+    return;
+  }
+  if (book.rating < 1 || book.rating > 5) {
+    showMessage("평점은 1~5 사이로 입력하세요", "error");
+    return;
+  }
 
   try {
     await addBook(book);
