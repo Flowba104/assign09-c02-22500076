@@ -38,6 +38,34 @@ async function loadBooks() {
     showMessage(err.message, "error");
   }
 }
+let editId = null; // 수정중인 책 id (없으면 null)
+
+function startEdit(id) {
+  const book = books.find(function (b) {
+    return b.id == id;
+  });
+
+  editId = id;
+  document.getElementById("title").value = book.title;
+  document.getElementById("author").value = book.author;
+  document.getElementById("genre").value = book.genre;
+  document.getElementById("price").value = book.price;
+  document.getElementById("rating").value = book.rating;
+
+  document.getElementById("form-title").textContent = "도서 수정";
+  document.getElementById("submit-btn").textContent = "수정";
+  document.getElementById("cancel-btn").hidden = false;
+}
+
+function cancelEdit() {
+  editId = null;
+  form.reset();
+  document.getElementById("form-title").textContent = "도서 등록";
+  document.getElementById("submit-btn").textContent = "등록";
+  document.getElementById("cancel-btn").hidden = true;
+}
+
+document.getElementById("cancel-btn").addEventListener("click", cancelEdit);
 
 loadBooks();
 
